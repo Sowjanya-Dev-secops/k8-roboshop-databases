@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
       - name: rabbitmq
-        image: rabbitmq:3
+        # image: rabbitmq:3
         volumeMounts:
         - name: rabbitmq
           mountPath: /var/lib/rabbitmq
