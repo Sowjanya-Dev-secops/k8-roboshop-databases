@@ -40,7 +40,7 @@ spec:
         ports:
         - name: liveness-port
           containerPort: 8080
-        resourses:
+        resources:
           requests:
             cpu: "100m"
             memory: "128Mi"
