@@ -12,12 +12,12 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: mysql
   namespace: roboshop
 spec:
   selector:
         project: roboshop
-        component: redis
+        component: mysql
         tier: db
   ports:
     - protocol: TCP
@@ -27,13 +27,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-headless
+  name: mysql-headless
   namespace: roboshop
 spec:
   clusterIP: None
   selector:
         project: roboshop
-        component: redis
+        component: mysql
         tier: db
   ports:
     - protocol: TCP
@@ -44,28 +44,28 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis
+  name: mysql
   namespace: roboshop
 spec:
   selector:
     matchLabels:
       project: roboshop
-      component: redis
+      component: mysql
       tier: db
-  serviceName: "redis-headless" # this should be headless service name
+  serviceName: "mysql-headless" # this should be headless service name
   replicas: 2 # by default is 1
   template:
     metadata:
       labels:
         project: roboshop
-        component: redis
+        component: mysql
         tier: db
     spec:
       containers:
-      - name: redis
-        image: muppalasowjanya/redis:v1
+      - name: mysql
+        image: muppalasowjanya/mysql:v1
         volumeMounts:
-        - name: redis
+        - name: mysql
           mountPath: /data/db
         - name: mysql-config
           mountPath: /etc/mysql/conf.d/my.cnf
@@ -77,7 +77,7 @@ spec:
   # this i for pvc
   volumeClaimTemplates:
   - metadata:
-      name: redis
+      name: mysql
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "roboshop-ebs"
