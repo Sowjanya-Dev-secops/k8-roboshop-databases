@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabittmq
+  name: rabbitmq
   namespace: roboshop
 spec:
   selector:
         project: roboshop
-        component: rabittmq
+        component: rabbitmq
         tier: db
   ports:
     - protocol: TCP
@@ -17,13 +17,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabittmq-headless
+  name: rabbitmq-headless
   namespace: roboshop
 spec:
   clusterIP: None
   selector:
         project: roboshop
-        component: rabittmq
+        component: rabbitmq
         tier: db
   ports:
     - protocol: TCP
@@ -34,13 +34,13 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: rabittmq
+  name: rabbitmq
   namespace: roboshop
 spec:
   selector:
     matchLabels:
       project: roboshop
-      component: rabittmq
+      component: rabbitmq
       tier: db
   serviceName: "mongodb-headless" # this should be headless service name
   replicas: 2 # by default is 1
@@ -48,15 +48,15 @@ spec:
     metadata:
       labels:
         project: roboshop
-        component: rabittmq
+        component: rabbitmq
         tier: db
     spec:
       containers:
-      - name: rabittmq
-        image: rabittmq:3
+      - name: rabbitmq
+        image: rabbitmq:3
         volumeMounts:
-        - name: rabittmq
-          mountPath: /var/lib/rabittmq
+        - name: rabbitmq
+          mountPath: /var/lib/rabbitmq
         env:
         - name: RABBITMQ_DEFAULT_USER
           value: roboshop
@@ -65,7 +65,7 @@ spec:
   # this i for pvc
   volumeClaimTemplates:
   - metadata:
-      name: rabittmq
+      name: rabbitmq
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "roboshop-ebs"
