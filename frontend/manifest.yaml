@@ -147,13 +147,13 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-      project: roboshop
-      component: frontend
-      tier: frontend
+    project: roboshop
+    component: frontend
+    tier: frontend
   ports:
     - protocol: TCP
       port: 80 # service port
-      targetPort: 8080 #container port
+      targetPort: 8080 # container port
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -164,12 +164,11 @@ metadata:
     project: roboshop
     component: frontend
     tier: frontend
-
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: frontend  # our deployment name
+    name: frontend
   minReplicas: 1
   maxReplicas: 10
   metrics:
@@ -178,4 +177,44 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 5 # real projects up to 70
+        averageUtilization: 5 # 70 is the real value
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: frontend
+#   namespace: roboshop
+# spec:
+#   type: LoadBalancer
+#   selector:
+#       project: roboshop
+#       component: frontend
+#       tier: frontend
+#   ports:
+#     - protocol: TCP
+#       port: 80 # service port
+#       targetPort: 8080 #container port
+# ---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: frontend
+#   namespace: roboshop
+#   labels:
+#     project: roboshop
+#     component: frontend
+#     tier: frontend
+
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: frontend  # our deployment name
+#   minReplicas: 1
+#   maxReplicas: 10
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: cpu
+#       target:
+#         type: Utilization
+#         averageUtilization: 5 # real projects up to 70
